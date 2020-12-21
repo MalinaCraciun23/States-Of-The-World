@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from tinydb import TinyDB
 
 
 def get_country_urls():
@@ -105,11 +106,17 @@ def get_country_information(country_url, population_density_table):
 
 
 def crawl_countries():
+    db = TinyDB("db.json")
+    db.truncate()
+
     country_urls = get_country_urls()
+
     population_density_url = "https://ro.wikipedia.org/wiki/Lista_%C8%9B%C4%83rilor_dup%C4%83_densitatea_popula%C8%9Biei"
     resp = requests.get(population_density_url)
     soup = BeautifulSoup(resp.text.strip(), "html5lib")
     population_density_table = soup.find("table")
+
     for url in country_urls:
         country_information = get_country_information(
             url, population_density_table)
+        db.insert(country_information)
