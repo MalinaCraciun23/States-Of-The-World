@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from tinydb import TinyDB
+from montydb import MontyClient
 
 
 def get_country_urls():
@@ -106,8 +106,8 @@ def get_country_information(country_url, population_density_table):
 
 
 def crawl_countries():
-    db = TinyDB("db.json")
-    db.truncate()
+    countries_col = MontyClient().db.countries
+    countries_col.drop()
 
     country_urls = get_country_urls()
 
@@ -116,7 +116,9 @@ def crawl_countries():
     soup = BeautifulSoup(resp.text.strip(), "html5lib")
     population_density_table = soup.find("table")
 
-    for url in country_urls:
-        country_information = get_country_information(
-            url, population_density_table)
-        db.insert(country_information)
+    countries = [
+        get_country_information(url, population_density_table)
+        for url in country_urls
+    ]
+
+    countries_col.insert_many(countries)
