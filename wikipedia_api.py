@@ -33,6 +33,18 @@ def get_neighbours(name):
         return "Country not found", 404
 
 
+@app.route("/capitala/<name>")
+def get_capital(name):
+    country = countries_col.find_one({"nume": name}, {
+        "capitala": 1,
+        "_id": False
+    })
+    if country:
+        return country["capitala"]
+    else:
+        return "Country not found", 404
+
+
 if __name__ == "__main__":
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
