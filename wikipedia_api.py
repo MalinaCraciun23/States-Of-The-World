@@ -8,19 +8,31 @@ countries_col = MontyClient().db.countries
 
 @app.route("/toate-tarile")
 def get_countries():
-    countries = countries_col.find({}, {'_id': False})
+    countries = countries_col.find({}, {"_id": False})
     return jsonify(list(countries))
 
 
 @app.route("/tara/<name>")
 def get_country(name):
-    country = countries_col.find_one({"nume": name}, {'_id': False})
+    country = countries_col.find_one({"nume": name}, {"_id": False})
     if country:
         return country
     else:
         return "Country not found", 404
 
 
-if __name__ == '__main__':
+@app.route("/vecini/<name>")
+def get_neighbours(name):
+    country = countries_col.find_one({"nume": name}, {
+        "vecini": 1,
+        "_id": False
+    })
+    if country:
+        return jsonify(country["vecini"])
+    else:
+        return "Country not found", 404
+
+
+if __name__ == "__main__":
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
