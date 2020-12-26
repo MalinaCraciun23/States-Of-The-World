@@ -6,7 +6,7 @@ from montydb import MontyClient
 def get_country_urls():
     country_list_url = "https://ro.wikipedia.org/wiki/Lista_statelor_lumii"
     resp = requests.get(country_list_url)
-    soup = BeautifulSoup(resp.text.strip(), "html5lib")
+    soup = BeautifulSoup(resp.text, "html5lib")
     country_urls = [
         td.b.find("a")["href"] for td in (
             tr.find("td")
@@ -72,7 +72,7 @@ def extract_country_population_density(country_url, population_density_table):
 def get_country_information(country_url, population_density_table):
     wikipedia_url = "https://ro.wikipedia.org"
     resp = requests.get(wikipedia_url + country_url)
-    soup = BeautifulSoup(resp.text.strip(), "html5lib")
+    soup = BeautifulSoup(resp.text, "html5lib")
 
     nume = soup.find("h1", id="firstHeading").string.strip()
 
@@ -113,7 +113,7 @@ def crawl_countries():
 
     population_density_url = "https://ro.wikipedia.org/wiki/Lista_%C8%9B%C4%83rilor_dup%C4%83_densitatea_popula%C8%9Biei"
     resp = requests.get(population_density_url)
-    soup = BeautifulSoup(resp.text.strip(), "html5lib")
+    soup = BeautifulSoup(resp.text, "html5lib")
     population_density_table = soup.find("table")
 
     countries = [
