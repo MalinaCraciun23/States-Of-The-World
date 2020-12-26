@@ -12,6 +12,15 @@ def get_countries():
     return jsonify(list(countries))
 
 
+@app.route("/tara/<name>")
+def get_country(name):
+    country = countries_col.find_one({"nume": name}, {'_id': False})
+    if country:
+        return country
+    else:
+        return "Country not found", 404
+
+
 if __name__ == '__main__':
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
