@@ -162,6 +162,17 @@ def get_countries_by_political_system(sistem_politic):
     return jsonify([country["nume"] for country in list(countries)])
 
 
+@app.route("/tari-care-incep-cu/<litera>")
+def get_countries_by_starting_letter(litera):
+    countries = countries_col.find({"nume": {
+        "$regex": "^" + litera
+    }}, {
+        "nume": 1,
+        "_id": False
+    })
+    return jsonify([country["nume"] for country in list(countries)])
+
+
 if __name__ == "__main__":
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
