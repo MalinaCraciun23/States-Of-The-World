@@ -57,11 +57,9 @@ def get_contries_by_currency(moneda):
 @app.route("/top-10-tari-suprafata-max")
 def get_countries_max_surface():
     countries = countries_col.find({
-        {
-            "suprafata": {
-                "$ne": None
-            }
-        },
+        "suprafata": {
+            "$ne": None
+        }
     }, {
         "nume": 1,
         "suprafata": 1,
@@ -81,6 +79,34 @@ def get_countries_min_surface():
         "suprafata": 1,
         "_id": False
     }).sort([("suprafata", 1)]).limit(10)
+    return jsonify(list(countries))
+
+
+@app.route("/top-10-tari-populatie-max")
+def get_countries_max_population():
+    countries = countries_col.find({
+        "populatie": {
+            "$ne": None
+        }
+    }, {
+        "nume": 1,
+        "populatie": 1,
+        "_id": False
+    }).sort([("populatie", -1)]).limit(10)
+    return jsonify(list(countries))
+
+
+@app.route("/top-10-tari-populatie-min")
+def get_countries_min_population():
+    countries = countries_col.find({
+        "populatie": {
+            "$ne": None
+        }
+    }, {
+        "nume": 1,
+        "populatie": 1,
+        "_id": False
+    }).sort([("populatie", 1)]).limit(10)
     return jsonify(list(countries))
 
 
