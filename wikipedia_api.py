@@ -46,7 +46,7 @@ def get_capital(name):
 
 
 @app.route("/tari-care-folosesc-moneda/<moneda>")
-def get_contries_by_currency(moneda):
+def get_countries_by_currency(moneda):
     countries = countries_col.find({"moneda": moneda}, {
         "nume": 1,
         "_id": False
@@ -139,7 +139,7 @@ def get_countries_min_density():
 
 
 @app.route("/tari-care-au-fusul-orar/<fus_orar>")
-def get_contries_by_time_zone(fus_orar):
+def get_countries_by_time_zone(fus_orar):
     countries = countries_col.find({"fus_orar": fus_orar}, {
         "nume": 1,
         "_id": False
@@ -148,11 +148,20 @@ def get_contries_by_time_zone(fus_orar):
 
 
 @app.route("/tari-care-vorbesc-limba/<limba>")
-def get_contries_by_language(limba):
+def get_countries_by_language(limba):
     countries = countries_col.find({"limbi": limba}, {"nume": 1, "_id": False})
     return jsonify([country["nume"] for country in list(countries)])
 
 
+@app.route("/tari-care-au-sistemul-politic/<sistem_politic>")
+def get_countries_by_political_system(sistem_politic):
+    countries = countries_col.find({"sistem_politic": sistem_politic}, {
+        "nume": 1,
+        "_id": False
+    })
+    return jsonify([country["nume"] for country in list(countries)])
+
+
 if __name__ == "__main__":
-    # crawl_countries()
+    crawl_countries()
     app.run(host="localhost", port=8000, debug=True)

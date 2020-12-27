@@ -102,7 +102,7 @@ def get_country_information(country_url, population_density_table):
         [limba.replace("limba", "").strip().lower()
          for limba in limbi] if limbi else None,
         "sistem_politic":
-        sistem_politic,
+        sistem_politic.lower() if sistem_politic else None,
         "capitala":
         capitala,
         "moneda":
