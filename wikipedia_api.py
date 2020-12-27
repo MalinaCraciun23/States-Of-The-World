@@ -45,6 +45,15 @@ def get_capital(name):
         return "Country not found", 404
 
 
+@app.route("/tari-care-folosesc-moneda/<moneda>")
+def get_contries_by_currency(moneda):
+    countries = countries_col.find({"moneda": moneda}, {
+        "nume": 1,
+        "_id": False
+    })
+    return jsonify([country["nume"] for country in list(countries)])
+
+
 if __name__ == "__main__":
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
