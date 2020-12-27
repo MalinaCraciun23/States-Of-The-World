@@ -110,6 +110,34 @@ def get_countries_min_population():
     return jsonify(list(countries))
 
 
+@app.route("/top-10-tari-densitate-max")
+def get_countries_max_density():
+    countries = countries_col.find({
+        "densitate": {
+            "$ne": None
+        }
+    }, {
+        "nume": 1,
+        "densitate": 1,
+        "_id": False
+    }).sort([("densitate", -1)]).limit(10)
+    return jsonify(list(countries))
+
+
+@app.route("/top-10-tari-densitate-min")
+def get_countries_min_density():
+    countries = countries_col.find({
+        "densitate": {
+            "$ne": None
+        }
+    }, {
+        "nume": 1,
+        "densitate": 1,
+        "_id": False
+    }).sort([("densitate", 1)]).limit(10)
+    return jsonify(list(countries))
+
+
 if __name__ == "__main__":
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
