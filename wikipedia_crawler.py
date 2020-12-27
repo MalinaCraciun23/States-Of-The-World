@@ -92,16 +92,27 @@ def get_country_information(country_url, population_density_table):
         country_url, population_density_table)
 
     return {
-        "nume": nume,
-        "vecini": vecini,
-        "fus_orar": fus_orar,
-        "limbi": limbi,
-        "sistem_politic": sistem_politic,
-        "capitala": capitala,
-        "moneda": moneda,
-        "suprafata": suprafata,
-        "populatie": populatie,
-        "densitate": densitate
+        "nume":
+        nume,
+        "vecini":
+        vecini,
+        "fus_orar":
+        fus_orar,
+        "limbi":
+        [limba.replace("limba", "").strip().lower()
+         for limba in limbi] if limbi else None,
+        "sistem_politic":
+        sistem_politic,
+        "capitala":
+        capitala,
+        "moneda":
+        moneda.lower() if moneda else None,
+        "suprafata":
+        suprafata,
+        "populatie":
+        populatie,
+        "densitate":
+        densitate
     }
 
 
