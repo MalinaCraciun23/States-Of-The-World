@@ -54,6 +54,36 @@ def get_contries_by_currency(moneda):
     return jsonify([country["nume"] for country in list(countries)])
 
 
+@app.route("/top-10-tari-suprafata-max")
+def get_countries_max_surface():
+    countries = countries_col.find({
+        {
+            "suprafata": {
+                "$ne": None
+            }
+        },
+    }, {
+        "nume": 1,
+        "suprafata": 1,
+        "_id": False
+    }).sort([("suprafata", -1)]).limit(10)
+    return jsonify(list(countries))
+
+
+@app.route("/top-10-tari-suprafata-min")
+def get_countries_min_surface():
+    countries = countries_col.find({
+        "suprafata": {
+            "$ne": None
+        }
+    }, {
+        "nume": 1,
+        "suprafata": 1,
+        "_id": False
+    }).sort([("suprafata", 1)]).limit(10)
+    return jsonify(list(countries))
+
+
 if __name__ == "__main__":
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
