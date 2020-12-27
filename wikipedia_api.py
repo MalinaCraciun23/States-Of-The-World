@@ -147,6 +147,12 @@ def get_contries_by_time_zone(fus_orar):
     return jsonify([country["nume"] for country in list(countries)])
 
 
+@app.route("/tari-care-vorbesc-limba/<limba>")
+def get_contries_by_language(limba):
+    countries = countries_col.find({"limbi": limba}, {"nume": 1, "_id": False})
+    return jsonify([country["nume"] for country in list(countries)])
+
+
 if __name__ == "__main__":
-    crawl_countries()
+    # crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
