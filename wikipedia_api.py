@@ -138,6 +138,15 @@ def get_countries_min_density():
     return jsonify(list(countries))
 
 
+@app.route("/tari-care-au-fusul-orar/<fus_orar>")
+def get_contries_by_time_zone(fus_orar):
+    countries = countries_col.find({"fus_orar": fus_orar}, {
+        "nume": 1,
+        "_id": False
+    })
+    return jsonify([country["nume"] for country in list(countries)])
+
+
 if __name__ == "__main__":
     crawl_countries()
     app.run(host="localhost", port=8000, debug=True)
