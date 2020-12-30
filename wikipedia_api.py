@@ -174,5 +174,7 @@ def get_countries_by_starting_letter(litera):
 
 
 if __name__ == "__main__":
+    print("Started crawling wikipedia...")
     crawl_countries()
+    print("Finished crawling wikipedia")
     app.run(host="localhost", port=8000, debug=True)
