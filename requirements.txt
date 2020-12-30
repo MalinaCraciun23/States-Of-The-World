@@ -1,0 +1,4 @@
+requests == 2.25.1
+bs4 == 0.0.1
+montydb == 2.1.1
+Flask == 1.1.2
