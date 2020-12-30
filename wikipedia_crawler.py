@@ -1,9 +1,14 @@
+"""Wikipedia crawler.
+
+Crawls Wikipedia for data and saves it in the database.
+"""
 import requests
 from bs4 import BeautifulSoup
 from montydb import MontyClient
 
 
 def get_country_urls():
+    """Crawl Wikipedia and get urls to all country pages."""
     country_list_url = "https://ro.wikipedia.org/wiki/Lista_statelor_lumii"
     resp = requests.get(country_list_url)
     soup = BeautifulSoup(resp.text, "html5lib")
@@ -18,6 +23,7 @@ def get_country_urls():
 
 
 def get_property_value(property, soup):
+    """Extract single value for a property from a country's page."""
     th = soup.find("th", string=property)
     if not th:
         return None
@@ -30,6 +36,7 @@ def get_property_value(property, soup):
 
 
 def get_property_values(property, soup):
+    """Extract values for a property from a country's page."""
     th = soup.find("th", string=property)
     if not th:
         return None
@@ -45,14 +52,17 @@ def get_property_values(property, soup):
 
 
 def string_to_int(string):
+    """Transform a string variable into an int."""
     return int(string.replace(".", "").replace(",", ""))
 
 
 def string_to_float(string):
+    """Transform a string variable into a float."""
     return float(string.replace(".", "").replace(",", "."))
 
 
 def extract_country_population_density(country_url, population_density_table):
+    """Extract country's surface, population and density from a table."""
     a = population_density_table.find("a", href=country_url)
     td = a.parent if a else None
     suprafata_td = td.find_next_sibling("td", align="right") if td else None
@@ -70,6 +80,7 @@ def extract_country_population_density(country_url, population_density_table):
 
 
 def get_country_information(country_url, population_density_table):
+    """Get all property values for a country from Wikipedia."""
     wikipedia_url = "https://ro.wikipedia.org"
     resp = requests.get(wikipedia_url + country_url)
     soup = BeautifulSoup(resp.text, "html5lib")
@@ -117,12 +128,14 @@ def get_country_information(country_url, population_density_table):
 
 
 def crawl_countries():
+    """Get data about all countries from Wikipedia and save in database."""
     countries_col = MontyClient().db.countries
     countries_col.drop()
 
     country_urls = get_country_urls()
 
-    population_density_url = "https://ro.wikipedia.org/wiki/Lista_%C8%9B%C4%83rilor_dup%C4%83_densitatea_popula%C8%9Biei"
+    population_density_url = "https://ro.wikipedia.org/wiki" \
+        "/Lista_%C8%9B%C4%83rilor_dup%C4%83_densitatea_popula%C8%9Biei"
     resp = requests.get(population_density_url)
     soup = BeautifulSoup(resp.text, "html5lib")
     population_density_table = soup.find("table")

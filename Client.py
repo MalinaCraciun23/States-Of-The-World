@@ -1,3 +1,9 @@
+"""
+Wikipedia API client.
+
+Send GET requests to the Wikipedia API based on user input.
+"""
+
 import re
 import requests
 
