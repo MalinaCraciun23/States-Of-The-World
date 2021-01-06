@@ -6,9 +6,19 @@ Provide routes to get data about countries from Wikipedia.
 from flask import Flask, jsonify
 from montydb import MontyClient
 from wikipedia_crawler import crawl_countries
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 countries_col = MontyClient().db.countries
+
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    """Catch exceptions and return a proper response."""
+    code = 500
+    if isinstance(e, HTTPException):
+        code = e.code
+    return jsonify(error=str(e)), code
 
 
 @app.route("/toate-tarile")
@@ -197,4 +207,4 @@ if __name__ == "__main__":
     print("Started crawling wikipedia...")
     crawl_countries()
     print("Finished crawling wikipedia")
-    app.run(host="localhost", port=8000, debug=True)
+    app.run(host="localhost", port=8000, debug=False, use_reloader=False)

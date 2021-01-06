@@ -132,17 +132,20 @@ def crawl_countries():
     countries_col = MontyClient().db.countries
     countries_col.drop()
 
-    country_urls = get_country_urls()
+    try:
+        country_urls = get_country_urls()
 
-    population_density_url = "https://ro.wikipedia.org/wiki" \
-        "/Lista_%C8%9B%C4%83rilor_dup%C4%83_densitatea_popula%C8%9Biei"
-    resp = requests.get(population_density_url)
-    soup = BeautifulSoup(resp.text, "html5lib")
-    population_density_table = soup.find("table")
+        population_density_url = "https://ro.wikipedia.org/wiki" \
+            "/Lista_%C8%9B%C4%83rilor_dup%C4%83_densitatea_popula%C8%9Biei"
+        resp = requests.get(population_density_url)
+        soup = BeautifulSoup(resp.text, "html5lib")
+        population_density_table = soup.find("table")
 
-    countries = [
-        get_country_information(url, population_density_table)
-        for url in country_urls
-    ]
+        countries = [
+            get_country_information(url, population_density_table)
+            for url in country_urls
+        ]
+    except Exception as e:
+        print("Exception while crawling wikipedia: " + str(e))
 
     countries_col.insert_many(countries)

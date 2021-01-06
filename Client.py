@@ -23,10 +23,13 @@ if __name__ == "__main__":
     for num, route in enumerate(routes, start=1):
         print("Route {}: {}".format(num, route))
     while True:
-        choice = int(input("Pick a route: "))
-        route = routes[choice - 1]
-        variable = re.search(r'(?<=<).*(?=>)', route)
-        value = input("Enter value of " + variable.group() +
-                      ": ") if variable else ""
-        r = requests.get(api_url + re.sub(r'<.*>', value, route))
-        print(r.text)
+        try:
+            choice = int(input("Pick a route: "))
+            route = routes[choice - 1]
+            variable = re.search(r'(?<=<).*(?=>)', route)
+            value = input("Enter value of " + variable.group() +
+                          ": ") if variable else ""
+            r = requests.get(api_url + re.sub(r'<.*>', value, route))
+            print(r.text)
+        except ValueError:
+            print("Not a valid option.  Try again...")
