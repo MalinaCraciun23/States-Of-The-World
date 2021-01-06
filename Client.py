@@ -4,6 +4,7 @@ Wikipedia API client.
 Send GET requests to the Wikipedia API based on user input.
 """
 
+import sys
 import re
 import requests
 
@@ -20,11 +21,14 @@ routes = [
 ]
 
 if __name__ == "__main__":
+    print("0: exit")
     for num, route in enumerate(routes, start=1):
         print("Route {}: {}".format(num, route))
     while True:
         try:
             choice = int(input("Pick a route: "))
+            if (choice == 0):
+                sys.exit(0)
             route = routes[choice - 1]
             variable = re.search(r'(?<=<).*(?=>)', route)
             value = input("Enter value of " + variable.group() +
